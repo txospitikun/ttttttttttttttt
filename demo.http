@@ -1,0 +1,37 @@
+###############################################################################
+#  SPLSD-35 - cereri de test (IntelliJ HTTP Client)
+#  Deschide acest fisier in IntelliJ si apasa pe sageata verde din dreptul
+#  fiecarei cereri. Presupune ca registrul + cel putin alice/bob/charlie ruleaza.
+###############################################################################
+
+### 1. Vezi ce procesoare de flux sunt inregistrate in registru
+GET http://localhost:8761/processors
+
+### 2. Identitatea fiecarui procesor (asa cum s-a inregistrat)
+GET http://localhost:8081/chat/whoami
+
+### 3. alice difuzeaza un mesaj catre toti ceilalti (coregrafie)
+POST http://localhost:8081/chat/send
+Content-Type: application/json
+
+{
+  "text": "Salut tuturor, sunt alice!"
+}
+
+### 4. bob raspunde
+POST http://localhost:8082/chat/send
+Content-Type: application/json
+
+{
+  "text": "Salut alice, aici bob."
+}
+
+### 5. Vezi inbox-ul lui bob (ar trebui sa contina mesajul de la alice)
+GET http://localhost:8082/chat/inbox
+
+### 6. Vezi inbox-ul lui charlie (mesajele de la alice si bob)
+GET http://localhost:8083/chat/inbox
+
+### 7. (optional) sterge manual un procesor din registru dupa id
+#   inlocuieste {id} cu un id real obtinut la pasul 1
+# DELETE http://localhost:8761/processors/{id}

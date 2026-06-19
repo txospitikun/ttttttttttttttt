@@ -1,0 +1,70 @@
+# ============================================================================
+#  SPLSD-35 - rularea intregului sistem, fiecare microserviciu in masina lui
+#  virtuala (container Docker), conform definitiei unui microserviciu.
+#
+#  - registry : microserviciul de registru (web + baza de date H2)
+#  - alice / bob / charlie : procesoare de flux (noduri de chat)
+#
+#  Procesoarele se descopera intre ele prin registru (coregrafie) si comunica
+#  peer-to-peer pe reteaua Docker, folosind numele containerului ca hostname.
+#
+#  Pornire:   docker compose up --build
+#  Oprire:    docker compose down   (oprirea sterge automat procesoarele din registru)
+# ============================================================================
+
+version: "3.8"
+
+services:
+
+  registry:
+    build:
+      context: .
+      dockerfile: registry-service/Dockerfile
+    container_name: registry
+    ports:
+      - "8761:8761"
+
+  alice:
+    build:
+      context: .
+      dockerfile: flow-processor/Dockerfile
+    container_name: alice
+    environment:
+      PORT: 8081
+      PROCESSOR_NAME: alice
+      PROCESSOR_HOST: alice
+      REGISTRY_URL: http://registry:8761
+    ports:
+      - "8081:8081"
+    depends_on:
+      - registry
+
+  bob:
+    build:
+      context: .
+      dockerfile: flow-processor/Dockerfile
+    container_name: bob
+    environment:
+      PORT: 8082
+      PROCESSOR_NAME: bob
+      PROCESSOR_HOST: bob
+      REGISTRY_URL: http://registry:8761
+    ports:
+      - "8082:8082"
+    depends_on:
+      - registry
+
+  charlie:
+    build:
+      context: .
+      dockerfile: flow-processor/Dockerfile
+    container_name: charlie
+    environment:
+      PORT: 8083
+      PROCESSOR_NAME: charlie
+      PROCESSOR_HOST: charlie
+      REGISTRY_URL: http://registry:8761
+    ports:
+      - "8083:8083"
+    depends_on:
+      - registry

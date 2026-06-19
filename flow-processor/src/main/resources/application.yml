@@ -1,0 +1,19 @@
+server:
+  # portul HTTP propriu (suprascris prin variabila de mediu PORT in Docker)
+  port: ${PORT:8081}
+
+spring:
+  application:
+    name: flow-processor
+
+processor:
+  # numele afisat in chat si in registru
+  name: ${PROCESSOR_NAME:processor-1}
+  # hostname-ul la care ne pot contacta ceilalti:
+  #   - local            -> localhost
+  #   - in Docker Compose -> numele serviciului/containerului (ex: alice)
+  host: ${PROCESSOR_HOST:localhost}
+
+registry:
+  # adresa microserviciului de registru
+  url: ${REGISTRY_URL:http://localhost:8761}

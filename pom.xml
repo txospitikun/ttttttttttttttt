@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.sd.laborator</groupId>
+    <artifactId>splsd-35</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <name>SPLSD-35 - Chat cu coregrafie si registru de servicii</name>
+    <description>
+        Pornind de la aplicatia de chat din Laboratorul 8, sistemul este restructurat:
+        MessageManager-ul (broker central / orchestrare) este inlocuit cu un REGISTRU
+        de servicii (microserviciu web cu baza de date, accesat prin HTTP) iar nodurile
+        de chat devin PROCESOARE DE FLUX care se inregistreaza la pornire, se sterg la
+        oprire si comunica peer-to-peer prin HTTP (COREGRAFIE).
+    </description>
+
+    <!-- Mostenim configuratia probata din laboratoare (Spring Boot 2.3.12 + Kotlin 1.6.0 + Java 8) -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.12.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <kotlin.version>1.6.0</kotlin.version>
+        <kotlin.code.style>official</kotlin.code.style>
+    </properties>
+
+    <modules>
+        <module>registry-service</module>
+        <module>flow-processor</module>
+    </modules>
+
+</project>
